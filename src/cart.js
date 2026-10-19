@@ -63,12 +63,37 @@ function removeFromCart(cart, productId) {
   return filteredProducts;
 }
 
+function calculateCartSubtotal(cart) {
+  if (cart.length === 0) {
+    return 0;
+  }
 
-function calculateCartSubtotal() {
-  return notImplemented();
+  const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  return total;
 }
-function calculateOrderTotal() {
-  return notImplemented();
+
+function calculateOrderTotal(cart, promoCode) {
+  const subtotal = calculateCartSubtotal(cart);
+
+  let discount = 0;
+  let delivery = 0;
+
+  if (promoCode === "SAVE10" && subtotal >= 20000) {
+    discount = subtotal * 0.1;
+  }
+
+  if (subtotal < 50000) {
+    delivery = 30000;
+  }
+
+  const total = subtotal - discount + delivery;
+
+  return {
+    subtotal: subtotal,
+    discount: discount,
+    delivery: delivery,
+    total: total,
+  };
 }
 
 const cartApi = {
